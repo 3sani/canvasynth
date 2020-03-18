@@ -1,25 +1,47 @@
 const tau = 2 * Math.PI;
 
+/** @type {number} Number of HTML5 canvas frames are drawn before the synthesisation loops */
 var synthesisPeriod = 360;
+
+/** @type {number} Counter for HTML5 canvas frames  */
 var p = 0;
 
+// TODO add all of these as parameters into the app
 var fadeColor = "rgb(0,0,0)";
 var fadeOpacity = 0.5;
 var bgColor = "black";
 
 var waveColor = "rgb(85, 255, 33)";
 
+/** @type {number} Center x-coordinate for the browser window */
 var centreX;
+
+/** @type {number} Center x-coordinate for the browser window */
 var centreY;
+
+/** @type {Object[]} Array containing every active oscillator */
 var oscillators = [];
 
-// Fullscreens the synthesisation window
+// TODO Add multiple canvases to allow for layered effects
+/** @type {Object} Reference to the HTML5 canvas used for the main synthesis */
 var sCanvas = document.querySelector('#synth');
-sCanvas.width = window.innerWidth;
-sCanvas.height = window.innerHeight;
 
-// Reference to synthesisation context. Used for drawing to output synthesis.
+/** @type {Object} Reference to the main synthesis canvas graphics context. Used for drawing onto the canvas.*/
 var s = sCanvas.getContext('2d');
+
+$(document).ready(function () {
+    sCanvas.width = window.innerWidth;
+    sCanvas.height = window.innerHeight;
+
+    document.body.style.backgroundColor = bgColor;
+    centreX = innerWidth / 2;
+    centreY = innerHeight / 2;
+
+    Oscillator.addOscillator();
+    Oscillator.addOscillator(); // TODO REMOVE. Adding second oscillator here just for debugging.
+    animate();
+});
+
 
 window.onresize = function () {
     sCanvas.width = window.innerWidth;
@@ -27,15 +49,6 @@ window.onresize = function () {
     centreX = innerWidth / 2;
     centreY = innerHeight / 2;
 }
-
-$(document).ready(function () {
-    document.body.style.backgroundColor = bgColor;
-    centreX = innerWidth / 2;
-    centreY = innerHeight / 2;
-    Oscillator.addOscillator();
-    Oscillator.addOscillator(); // TODO REMOVE
-    animate();
-});
 
 
 
@@ -104,6 +117,9 @@ class Oscillator {
         return clone.find('.visualiser')[0];
     }
 
+    /**
+     * Updates the full value table for this particular oscillator by calling the correct type wave function calculator.
+     */
     calculateValueTable() {
         switch (this.type) {
             case 0:
@@ -202,7 +218,7 @@ class Oscillator {
 
 
     /**
-     * Renders the associated visualiser of this oscillator.
+     * Renders the visualiser of this oscillator.
      */
     drawOscillatorVisualiser() {
         let visualiserHeight = this.c.height;
@@ -229,25 +245,23 @@ class Oscillator {
 
 // TODO EFFECTS
 //#region
+class Effect {
 
-
-
-
+}
 //#endregion
 
 
 
 
+// The main loop for the whole app. Called as fast as the browser pleases.
 function animate() {
     p++;
     if (p >= synthesisPeriod) {
         p = 0;
-
-        s.clearRect(0, 0, innerWidth, innerHeight);
+        s.clearRect(0, 0, innerWidth, innerHeight); // Clears the synthesiser view. Mainly here for debugging (but who knows).
     }
 
-    requestAnimationFrame(animate);
-
+    //#region placeholder effects for debugging
     s.globalAlpha = fadeOpacity;
     s.fillStyle = fadeColor;
     s.fillRect(0, 0, innerWidth, innerHeight);
@@ -259,41 +273,51 @@ function animate() {
         centreY + oscillators[1].val[p] * 0.475 * innerHeight,
         20, 0, 2 * Math.PI);
     s.stroke();
+    //#endregion
+
+    requestAnimationFrame(animate);
 }
 
 
 
 
 //#region input
+
+// Collapse an oscillator to just the top bar.
 $('.collapseButton').click(function () {
     oscAttribute = "[osc='" + $(this).attr("osc") + "']";
     $('.visualiser' + oscAttribute + ', .oscillatorParameters' + oscAttribute).toggle();
 });
 
+// Update oscillator frequency from slider.
 $('.freq').on('input', function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
     osc.frequency = Math.round(Math.pow(1.006932, this.value)); // Just a nice curve, allows for more contol with small values
     osc.updateOscillator();
 });
 
+// Update oscillator amplitude from slider.
 $('.amplitude').on('input', function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
     osc.amplitude = 1 + 0.00001 * Math.sign(this.value) * this.value * this.value;
     osc.updateOscillator();
 });
 
+// Update oscillator offsset from slider.
 $('.offset').on('input', function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
     osc.offset = this.value / 1000;
     osc.updateOscillator();
 });
 
-$('.waveMenu').change(function () {
+// Update oscillator wave type from dropdown
+$('.waveMenu').change(function () { // TODO Implement the radio buttons instead.
     osc = oscillators[parseInt($(this).attr("osc"))];
     osc.type = parseInt(this.value);
     osc.updateOscillator();
 });
 
+// Adds oscillator from add oscillator button.
 $('#addOscillator').click(function () {
     Oscillator.addOscillator();
     if (oscillators.length >= 10) $(this).hide();
