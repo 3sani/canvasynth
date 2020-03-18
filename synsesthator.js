@@ -1,10 +1,10 @@
 const tau = 2 * Math.PI;
 
-var synthesisPeriod = 60 * 5;
+var synthesisPeriod = 360;
 var p = 0;
 
 var fadeColor = "rgb(0,0,0)";
-var fadeOpacity = 0.01;
+var fadeOpacity = 0.5;
 var bgColor = "black";
 
 var waveColor = "rgb(85, 255, 33)";
@@ -161,9 +161,9 @@ class Oscillator {
         let normalizer = 0.5 * synthesisPeriod;
 
         for (let i = 0; i < synthesisPeriod; i++) {
-            this.val[i] = 
+            this.val[i] =
                 ((i + offset) * frequency) % synthesisPeriod - normalizer >= 0 ? amplitude : -amplitude
-            ;
+                ;
         }
     }
 
@@ -252,22 +252,33 @@ function animate() {
     s.fillStyle = fadeColor;
     s.fillRect(0, 0, innerWidth, innerHeight);
     s.globalAlpha = 1;
-    s.fillStyle = "rgb(85, 255, 33)";
+    s.strokeStyle = "rgb(85, 255, 33)";
     s.beginPath();
     s.arc(
-        centreX + oscillators[0].val[p] * 0.4 * innerWidth,
-        centreY + oscillators[1].val[p] * 0.4 * innerHeight,
-        Math.abs(oscillators[0].val[p] + oscillators[1].val[p]) * 10, 0, 2 * Math.PI);
-    s.fill();
+        centreX + oscillators[0].val[p] * 0.475 * innerWidth,
+        centreY + oscillators[1].val[p] * 0.475 * innerHeight,
+        20, 0, 2 * Math.PI);
+    s.stroke();
 }
 
 
 
 
 //#region input
+$('.collapseButton').click(function () {
+    oscAttribute = "[osc='" + $(this).attr("osc") + "']";
+    $('.visualiser' + oscAttribute + ', .oscillatorParameters' + oscAttribute).toggle();
+});
+
 $('.freq').on('input', function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
     osc.frequency = Math.round(Math.pow(1.006932, this.value)); // Just a nice curve, allows for more contol with small values
+    osc.updateOscillator();
+});
+
+$('.amplitude').on('input', function () {
+    osc = oscillators[parseInt($(this).attr("osc"))];
+    osc.amplitude = 1 + 0.00001 * Math.sign(this.value) * this.value * this.value;
     osc.updateOscillator();
 });
 
@@ -281,11 +292,6 @@ $('.waveMenu').change(function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
     osc.type = parseInt(this.value);
     osc.updateOscillator();
-});
-
-$('.collapseButton').click(function () {
-    oscAttribute = "[osc='" + $(this).attr("osc") + "']";
-    $('.visualiser' + oscAttribute + ', .oscillatorParameters' + oscAttribute).toggle();
 });
 
 $('#addOscillator').click(function () {

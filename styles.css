@@ -1,6 +1,6 @@
 :root {
-    --main: rgb(85, 255, 33);
-    --background: black;
+    --main: #6cff66;
+    --background: #000501;
 }
 
 html, body {
@@ -28,12 +28,11 @@ html, body {
 }
 
 #oscillatorColumn {
-    width: 404px;
+    width: 402px;
 }
 
 .oscillatorContainer {
     border: 1px solid var(--main);
-    padding: 1px;
     background: var(--background);
     margin-bottom: 10px;
 }
@@ -42,6 +41,10 @@ html, body {
     text-align: right;
     padding-top: 2px;
     padding-left: 2px;
+}
+
+.parameterContainer{
+    padding: 0 5px 0 5px;
 }
 
 .parameterLabel, .waveMenu, .oscillatorLabel, .collapseButton {
@@ -89,11 +92,11 @@ option {
 }
 
 .oscillatorParameters {
-    padding: 0 2px 0 2px;
+    padding: 0 2px 0 4px;
     display: grid;
     grid-template-columns: auto auto;
-    gap: 1px 10px;
-    margin-bottom: 2px;
+    gap: 0;
+    margin-top: -4px;
 }
 
 input[type=range] {
@@ -124,6 +127,9 @@ input[type=range]::-webkit-slider-runnable-track {
 }
 
 .visualiser {
+    padding: 1px 0 1px 0;
+    border-top: 1px solid var(--main);
+    border-bottom: 1px solid var(--main);
     grid-column: 1 / 3;
 }
 
