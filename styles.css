@@ -1,0 +1,132 @@
+:root {
+    --main: rgb(85, 255, 33);
+    --background: black;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: scroll;
+    display: grid;
+    padding-right: 20px;
+    box-sizing: content-box;
+}
+
+#htmnlTemplates {
+    display: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+#rack {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    flex-direction: row;
+}
+
+#oscillatorColumn {
+    width: 404px;
+}
+
+.oscillatorContainer {
+    border: 1px solid var(--main);
+    padding: 1px;
+    background: var(--background);
+    margin-bottom: 10px;
+}
+
+.waveBar {
+    text-align: right;
+    padding-top: 2px;
+    padding-left: 2px;
+}
+
+.parameterLabel, .waveMenu, .oscillatorLabel, .collapseButton {
+    font-family: "Lucida Console", Monaco, monospace;
+    font-size: 8pt;
+    letter-spacing: 3px;
+    color: var(--main);
+    display: inline;
+    margin: 0;
+}
+
+.oscillatorLabel {
+    font-size: 12pt;
+    margin-top: 3px;
+}
+
+.collapseButton {
+    background: none;
+    border: 0;
+    vertical-align: top;
+    padding: 6px;
+    margin-right: 15px;
+}
+
+.parameterLabel {
+    padding-top: 5px;
+}
+
+.waveText {
+    vertical-align: text-top;
+    margin: 5px 0 5px 0;
+}
+
+.waveMenu {
+    font-size: 12pt;
+    background-color: var(--background);
+    border: 1px solid var(--main);
+    margin-right: 2px;
+    padding-top: 1px;
+}
+
+option {
+    background-color: var(--background);
+    color: var(--main);
+}
+
+.oscillatorParameters {
+    padding: 0 2px 0 2px;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 1px 10px;
+    margin-bottom: 2px;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    width: 100%;
+    background: transparent;
+    margin: 0;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    height: 16px;
+    width: 16px;
+    border: 1px solid var(--main);
+    background-color: var(--main);
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: -1px;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 16px;
+    cursor: pointer;
+    background-color: var(--background);
+    border: 1px solid var(--main);
+    border-radius: 25px;
+}
+
+.visualiser {
+    grid-column: 1 / 3;
+}
+
+#addOscillator { /* TODO ADD OSCILLATOR BUTTON STYLING*/
+
+}

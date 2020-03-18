@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>CanvaSynth</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <canvas id="synth"></canvas>
+
+    <div id="rack">
+        <div id="oscillatorColumn" class="column">
+            <div id="oscillators">
+                <!-- all oscillators get added from code (by cloning from #OSCILLATOR_TEMPLATE) -->
+
+            </div>
+            <button id="addOscillator">+ add oscillator +</button> <!--TODO ADD OSCILLATOR BUTTON-->
+        </div>
+
+        <div id="multiColumn" class="column">
+
+        </div>
+
+        <div class="column">
+            <canvas class="TODO" height="128" width="402"></canvas>
+        </div>
+    </div>
+</body>
+
+
+<!-- #region TEMPLATES -->
+<div id="htmnlTemplates">
+
+    <div id="OSCILLATOR_TEMPLATE">
+        <div class="oscillatorContainer">
+            <div class="waveBar">
+                <p class="oscillatorLabel">oscillator</p>
+                <button class="collapseButton" osc="-1">[c]</button>
+                <p class="parameterLabel waveText">wave:</p>
+                <select class="waveMenu" osc="-1">
+                    <option value="0">sine</option>
+                    <option value="1">square</option>
+                    <option value="2">triangle</option>
+                    <option value="3">sawtooth</option>
+                </select>
+            </div>
+            <canvas class="visualiser" osc="-1" height="128" width="400"></canvas>
+            <div class="oscillatorParameters" osc="-1">
+                <p class="parameterLabel">frequency</p>
+                <p class="parameterLabel">offset</p>
+                <input class="oscillatorParameter freq" osc="-1" type="range" min="1" max="1000" value="1">
+                <input class="oscillatorParameter offset" osc="-1" type="range" min="0" max="999" value="0">
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- #endregion -->
+
+<script src="synsesthator.js"></script>
+</html>
