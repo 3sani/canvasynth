@@ -62,7 +62,8 @@ window.onresize = function () {
  * @property {Object} val Float32Array that acts as a lookup table for the oscillators values that are called during synthesisation.
  * @property {number} type Type of wave. 0 = sine, 1 = square, 2 = triangle, 3 = sawtooth.
  * @property {number} frequency Number of wave periods per synthesisPeriod.
- * @property {number} offset Amount of offset as a fraction of synthesisPeriod.
+ * @property {number} xoffset Amount of x-offset as a fraction of synthesisPeriod.
+ * @property {number} yoffset Amount of y-offset as a total value (-1, 1).
  * @property {string} color Colour associated with oscillator.
  * @property {Object} dependants Array of objects that need to update when this oscillator updates.
  */
@@ -74,16 +75,18 @@ class Oscillator {
      * @param {number} [type=0] Type of wave. 0 = sine, 1 = square, 2 = triangle, 3 = sawtooth.
      * @param {number} [frequency=1] Number of wave periods per synthesisation period.
      * @param {number} [amplitude=1] A number the wave is multiplied by. All waves are trunctated to (-1,1)
-     * @param {number} [offset=0] Amount of offset as a fraction of synthesisation period.
+     * @param {number} [xoffset=0] Amount of x-offset as a fraction of synthesisation period.
+     * @param {number} [yoffset=0] Amount of y-offset as a total value (-1, 1).
      */
-    constructor(color = "white", type = 0, frequency = 1, offset = 0, amplitude = 1) {
+    constructor(color = "white", type = 0, frequency = 1, xoffset = 0, yoffset = 0, amplitude = 1) {
         this.color = color;
         this.c = this.constructor.createOscillatorHTML(oscillators.length);
         this.ctx = this.c.getContext('2d');
         this.val;
         this.type = type;
         this.frequency = frequency;
-        this.offset = offset;
+        this.xoffset = xoffset;
+        this.yoffset = yoffset;
         this.amplitude = amplitude;
         this.dependants = [];
     }
@@ -156,12 +159,13 @@ class Oscillator {
     sineValues() {
         this.val = new Float32Array(synthesisPeriod);
         let frequency = this.frequency;
-        let offset = this.offset;
         let amplitude = this.amplitude;
+        let xoffset = this.xoffset;
+        let yoffset = this.yoffset;
 
         for (let i = 0; i < synthesisPeriod; i++) {
             this.val[i] = Math.min(1, Math.max(-1, // Clamps values to (-1, 1)
-                amplitude * Math.sin(tau * ((frequency * i) / synthesisPeriod + offset))
+                amplitude * Math.sin(tau * ((frequency * i) / synthesisPeriod + xoffset))  + yoffset
             ));
         }
     }
@@ -171,15 +175,20 @@ class Oscillator {
      */
     squareValues() {
         this.val = new Float32Array(synthesisPeriod);
-        let offset = (this.offset + 0.5) * synthesisPeriod;
         let frequency = this.frequency;
-        let amplitude = Math.min(1, Math.max(-1, this.amplitude));
-        let normalizer = 0.5 * synthesisPeriod;
+        let xoffset = (this.xoffset + 0.5) * synthesisPeriod;
+        let yoffset = this.yoffset;
+        let amplitude = this.amplitude;
+
+        let squarePositiveVal = Math.min(1, Math.max(-1, Math.min(1, Math.max(-1, amplitude)) + yoffset));
+        let squareNegativeVal = Math.min(1, Math.max(-1, -Math.min(1, Math.max(-1, amplitude)) + yoffset));
+
+        let normaliser = 0.5 * synthesisPeriod; // Combines these for the slightest
 
         for (let i = 0; i < synthesisPeriod; i++) {
             this.val[i] =
-                ((i + offset) * frequency) % synthesisPeriod - normalizer >= 0 ? amplitude : -amplitude
-                ;
+                ((i + xoffset) * frequency) % synthesisPeriod - normaliser >= 0 ? squarePositiveVal : squareNegativeVal
+            ;
         }
     }
 
@@ -188,13 +197,14 @@ class Oscillator {
      */
     triValues() {
         this.val = new Float32Array(synthesisPeriod);
-        let offset = (this.offset + 0.75) * synthesisPeriod;
         let frequency = this.frequency;
         let amplitude = this.amplitude * 2;
+        let xoffset = (this.xoffset + 0.75) * synthesisPeriod;
+        let yoffset = this.yoffset;
 
         for (let i = 0; i < synthesisPeriod; i++) {
             this.val[i] = Math.min(1, Math.max(-1, // Clamps values to (-1, 1)
-                amplitude * (Math.abs(2 * (((i + offset) * frequency) % synthesisPeriod) / synthesisPeriod - 1) - 0.5)
+                amplitude * (Math.abs(2 * (((i + xoffset) * frequency) % synthesisPeriod) / synthesisPeriod - 1) - 0.5) + yoffset
             ));
         }
     }
@@ -204,13 +214,14 @@ class Oscillator {
      */
     sawValues() {
         this.val = new Float32Array(synthesisPeriod);
-        let offset = (this.offset + 0.5) * synthesisPeriod;
         let frequency = this.frequency;
         let amplitude = this.amplitude;
+        let xoffset = (this.xoffset + 0.5) * synthesisPeriod;
+        let yoffset = this.yoffset;
 
         for (let i = 0; i < synthesisPeriod; i++) {
             this.val[i] = Math.min(1, Math.max(-1, // Clamps values to (-1, 1)
-                amplitude * (2 * (((i + offset) * frequency) % synthesisPeriod) / synthesisPeriod - 1)
+                amplitude * (2 * (((i + xoffset) * frequency) % synthesisPeriod) / synthesisPeriod - 1) + yoffset
             ));
         }
     }
@@ -299,19 +310,26 @@ $('.freq').on('input', function () {
 // Update oscillator amplitude from slider.
 $('.amplitude').on('input', function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
-    osc.amplitude = 1 + 0.00001 * Math.sign(this.value) * this.value * this.value;
+    osc.amplitude = 0.00001 * Math.sign(this.value) * this.value * this.value;
     osc.updateOscillator();
 });
 
-// Update oscillator offsset from slider.
-$('.offset').on('input', function () {
+// Update oscillator x-offsset from slider.
+$('.xoffset').on('input', function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
-    osc.offset = this.value / 1000;
+    osc.xoffset = this.value / 1000;
+    osc.updateOscillator();
+});
+
+// Update oscillator y-offsset from slider.
+$('.yoffset').on('input', function () {
+    osc = oscillators[parseInt($(this).attr("osc"))];
+    osc.yoffset = this.value / 250;
     osc.updateOscillator();
 });
 
 // Update oscillator wave type from dropdown
-$('.waveMenu').change(function () { // TODO Implement the radio buttons instead.
+$('.waveMenu').change(function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
     osc.type = parseInt(this.value);
     osc.updateOscillator();
