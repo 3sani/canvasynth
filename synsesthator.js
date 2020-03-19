@@ -310,7 +310,7 @@ $('.freq').on('input', function () {
 // Update oscillator amplitude from slider.
 $('.amplitude').on('input', function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
-    osc.amplitude = 0.00001 * Math.sign(this.value) * this.value * this.value;
+    osc.amplitude = 1 + (-0.000001 * this.value + 0.01) * this.value;
     osc.updateOscillator();
 });
 
@@ -326,6 +326,11 @@ $('.yoffset').on('input', function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
     osc.yoffset = this.value / 250;
     osc.updateOscillator();
+});
+
+$('.oscillatorParameter').on('dblclick', function(){
+    $(this).val($(this).attr("defaultValue"));
+    $(this).trigger('input');
 });
 
 // Update oscillator wave type from dropdown
