@@ -269,7 +269,6 @@ function animate() {
     p++;
     if (p >= synthesisPeriod) {
         p = 0;
-        s.clearRect(0, 0, innerWidth, innerHeight); // Clears the synthesiser view. Mainly here for debugging (but who knows).
     }
 
     //#region placeholder effects for debugging
