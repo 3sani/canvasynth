@@ -46,6 +46,7 @@ html, body {
 
 .parameterContainer{
     padding: 0 5px 0 5px;
+    max-height: 35px;
 }
 
 .oscillatorContainer {
@@ -79,7 +80,7 @@ html, body {
 }
 
 .oscillatorParameters {
-    padding: 0 2px 0 4px;
+    padding: 0 2px 6px 4px;
     display: grid;
     grid-template-columns: auto auto;
     gap: 0;
@@ -91,9 +92,10 @@ html, body {
 }
 
 .waveText {
+    position: relative;
+    top: 1px;
     font-size: 12pt;
     margin-right: -3px;
-    vertical-align: baseline;
 }
 
 .waveMenu {
