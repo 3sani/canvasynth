@@ -37,54 +37,45 @@ html, body {
     margin-bottom: 10px;
 }
 
-.waveBar {
-    text-align: right;
-    padding-top: 2px;
-    padding-left: 2px;
+.topBar {
+    display : flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 2px;
 }
 
 .parameterContainer{
     padding: 0 5px 0 5px;
 }
 
-.parameterLabel, .waveMenu, .oscillatorLabel, .collapseButton {
-    font-family: "Lucida Console", Monaco, monospace;
-    font-size: 8pt;
+.oscillatorContainer {
+    --mainFont : "Lucida Console", Monaco, monospace;
     letter-spacing: 3px;
+}
+
+.parameterLabel, .waveMenu, .moduleLabel, .collapseButton {
+    font-family: var(--mainFont);
     color: var(--main);
     display: inline;
     margin: 0;
 }
 
-.oscillatorLabel {
+.parameterLabel {
+    font-size: 9pt;
+}
+
+.moduleLabel {
     font-size: 12pt;
     margin-top: 3px;
+    padding-left: 5px;
 }
 
 .collapseButton {
+    font-size: 10pt;
     background: none;
     border: 0;
     vertical-align: top;
-    padding: 6px;
-    margin-right: 15px;
-}
-
-.waveText {
-    vertical-align: text-top;
-    margin: 5px 0 5px 0;
-}
-
-.waveMenu {
-    font-size: 12pt;
-    background-color: var(--background);
-    border: 1px solid var(--main);
-    margin-right: 2px;
-    padding-top: 1px;
-}
-
-option {
-    background-color: var(--background);
-    color: var(--main);
+    padding: 3px;
 }
 
 .oscillatorParameters {
@@ -94,6 +85,31 @@ option {
     gap: 0;
     margin-top: -4px;
 }
+
+.waveMenuContainer{
+    padding-left: 50px;
+}
+
+.waveText {
+    font-size: 12pt;
+    margin-right: -3px;
+    vertical-align: baseline;
+}
+
+.waveMenu {
+    font-size: 12pt;
+    background-color: var(--background);
+    border: 1px solid var(--main);
+    margin-right: 2px;
+    padding-top: 1px;
+    vertical-align: text-top;
+}
+
+option {
+    background-color: var(--background);
+    color: var(--main);
+}
+
 
 input[type=range] {
     -webkit-appearance: none;

@@ -18,15 +18,16 @@
     <div id="rack">
         <div id="oscillatorColumn" class="column">
             <div id="oscillators">
-                <!-- all oscillators get added from code (by cloning from #OSCILLATOR_TEMPLATE) -->
-
+                <!-- oscillators get cloned from #htmlTemplates > #OSCILLATOR_TEMPLATE) -->
             </div>
             <button id="addOscillator">+ add oscillator +</button>
-            <!--TODO ADD OSCILLATOR BUTTON-->
         </div>
 
-        <div id="multiColumn" class="column">
+        <div id="effectColumn" class="column">
+            <div id="effects">
 
+            </div>
+            <button id="addEffect">+ add effect +</button>
         </div>
 
         <div class="column">
@@ -41,16 +42,21 @@
 
     <div id="OSCILLATOR_TEMPLATE">
         <div class="oscillatorContainer">
-            <div class="waveBar">
-                <p class="oscillatorLabel">oscillator</p>
+            <div class="topBar">
+
+                <p class="moduleLabel">oscillator</p>
                 <button class="collapseButton" osc="-1">[c]</button>
-                <p class="parameterLabel waveText">wave:</p>
-                <select class="waveMenu" osc="-1">
-                    <option value="0">sine</option>
-                    <option value="1">square</option>
-                    <option value="2">triangle</option>
-                    <option value="3">sawtooth</option>
-                </select>
+                
+                <div class="waveMenuContainer">
+                    <p class="parameterLabel waveText">wave</p>
+                    <select class="waveMenu" osc="-1">
+                        <option value="0">sine</option>
+                        <option value="1">square</option>
+                        <option value="2">triangle</option>
+                        <option value="3">sawtooth</option>
+                    </select>
+                </div>
+
             </div>
             <canvas class="visualiser" osc="-1" height="128" width="400"></canvas>
             <div class="oscillatorParameters" osc="-1">
@@ -74,6 +80,52 @@
                     <p class="parameterLabel">y-offset</p>
                     <input class="oscillatorParameter yoffset" osc="-1" type="range" min="-500" max="500" defaultValue="0" value="0">
                 </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="EFFECT_TEMPLATE">
+        <div class="effectContainer">
+            <div class="topBar">
+
+                <p class="moduleLabel">oscillator</p>
+                <button class="collapseButton" osc="-1">[c]</button>
+                
+                <div class="waveMenuContainer">
+                    <p class="parameterLabel waveText">wave</p>
+                    <select class="waveMenu" osc="-1">
+                        <option value="0">sine</option>
+                        <option value="1">square</option>
+                        <option value="2">triangle</option>
+                        <option value="3">sawtooth</option>
+                    </select>
+                </div>
+
+            </div>
+            <canvas class="visualiser" osc="-1" height="128" width="400"></canvas>
+            <div class="oscillatorParameters" osc="-1">
+
+                <div class="parameterContainer">
+                    <p class="parameterLabel">frequency</p>
+                    <input class="oscillatorParameter freq" osc="-1" type="range" min="1" max="1000" defaultValue="1" value="1">
+                </div>
+
+                <div class="parameterContainer">
+                    <p class="parameterLabel">amplitude</p>
+                    <input class="oscillatorParameter amplitude" osc="-1" type="range" min="-1000" max="1000" defaultValue="0" value="0">
+                </div>
+
+                <div class="parameterContainer">
+                    <p class="parameterLabel">x-offset</p>
+                    <input class="oscillatorParameter xoffset" osc="-1" type="range" min="0" max="999" defaultValue="0" value="0">
+                </div>
+
+                <div class="parameterContainer">
+                    <p class="parameterLabel">y-offset</p>
+                    <input class="oscillatorParameter yoffset" osc="-1" type="range" min="-500" max="500" defaultValue="0" value="0">
+                </div>
+
             </div>
         </div>
     </div>
