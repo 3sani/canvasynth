@@ -116,7 +116,8 @@ class Oscillator {
     static createOscillatorHTML(i) {
         let clone = $('#OSCILLATOR_TEMPLATE>div').clone(true).appendTo('#oscillators');
         clone.find('[osc="-1"]').attr("osc", i);
-        clone.find('.oscillatorLabel').html("oscillator " + i);
+        clone.find('[module="-1"]').attr("module", "o" + i);
+        clone.find('.moduleLabel').html("oscillator " + i);
         return clone.find('.visualiser')[0];
     }
 
@@ -295,8 +296,16 @@ function animate() {
 
 // Collapse an oscillator to just the top bar.
 $('.collapseButton').click(function () {
-    oscAttribute = "[osc='" + $(this).attr("osc") + "']";
-    $('.visualiser' + oscAttribute + ', .oscillatorParameters' + oscAttribute).toggle();
+    let moduleID = $(this).attr("module");
+    switch (moduleID.charAt(0)) {
+        case 'o':
+            oscAttribute = "[osc='" + moduleID.charAt(1) + "']";
+            $('.visualiser' + oscAttribute + ', .oscillatorParameters' + oscAttribute).toggle();
+            break;
+        default:
+            break;
+    }
+
 });
 
 // Update oscillator frequency from slider.
