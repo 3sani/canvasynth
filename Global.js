@@ -27,4 +27,8 @@ var oscillators = [];
 var sCanvas = document.querySelector('#synth');
 
 /** @type {Object} Reference to the main synthesis canvas graphics context. Used for drawing onto the canvas.*/
+<<<<<<< HEAD
 var s = sCanvas.getContext('2d');
+=======
+var s = sCanvas.getContext('2d');
+>>>>>>> 2ea4ff268930afd679ad4a5d294f55127a11e89f

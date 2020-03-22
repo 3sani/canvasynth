@@ -193,4 +193,8 @@ class Oscillator {
         this.ctx.lineTo(visualiserWidth, -visualiserDrawableHeight / 2 * this.val[0] + visualiserHeight / 2);
         this.ctx.stroke();
     }
+<<<<<<< HEAD:Oscillators.js
 }
+=======
+}
+>>>>>>> 2ea4ff268930afd679ad4a5d294f55127a11e89f:synsesthator.js

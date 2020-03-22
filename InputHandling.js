@@ -56,4 +56,8 @@ $('#addOscillator').click(function () {
     Oscillator.addOscillator();
     if (oscillators.length >= 10) $(this).hide();
 });
+<<<<<<< HEAD
 //#endregion
+=======
+//#endregion
+>>>>>>> 2ea4ff268930afd679ad4a5d294f55127a11e89f
