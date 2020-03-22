@@ -1,58 +1,3 @@
-const tau = 2 * Math.PI;
-
-/** @type {number} Number of HTML5 canvas frames are drawn before the synthesisation loops */
-var synthesisPeriod = 360;
-
-/** @type {number} Counter for HTML5 canvas frames  */
-var p = 0;
-
-// TODO add all of these as parameters into the app
-var fadeColor = "rgb(0,0,0)";
-var fadeOpacity = 0.5;
-var bgColor = "black";
-
-var waveColor = "rgb(85, 255, 33)";
-
-/** @type {number} Center x-coordinate for the browser window */
-var centreX;
-
-/** @type {number} Center x-coordinate for the browser window */
-var centreY;
-
-/** @type {Object[]} Array containing every active oscillator */
-var oscillators = [];
-
-// TODO Add multiple canvases to allow for layered effects
-/** @type {Object} Reference to the HTML5 canvas used for the main synthesis */
-var sCanvas = document.querySelector('#synth');
-
-/** @type {Object} Reference to the main synthesis canvas graphics context. Used for drawing onto the canvas.*/
-var s = sCanvas.getContext('2d');
-
-$(document).ready(function () {
-    sCanvas.width = window.innerWidth;
-    sCanvas.height = window.innerHeight;
-
-    document.body.style.backgroundColor = bgColor;
-    centreX = innerWidth / 2;
-    centreY = innerHeight / 2;
-
-    Oscillator.addOscillator();
-    Oscillator.addOscillator(); // TODO REMOVE. Adding second oscillator here just for debugging.
-    animate();
-});
-
-
-window.onresize = function () {
-    sCanvas.width = window.innerWidth;
-    sCanvas.height = window.innerHeight;
-    centreX = innerWidth / 2;
-    centreY = innerHeight / 2;
-}
-
-
-
-
 /**
  * @class
  * @classdesc An oscillator that produces the values of a standard wave with arbitrary frequency and offset.
@@ -64,22 +9,19 @@ window.onresize = function () {
  * @property {number} frequency Number of wave periods per synthesisPeriod.
  * @property {number} xoffset Amount of x-offset as a fraction of synthesisPeriod.
  * @property {number} yoffset Amount of y-offset as a total value (-1, 1).
- * @property {string} color Colour associated with oscillator.
  * @property {Object} dependants Array of objects that need to update when this oscillator updates.
  */
 class Oscillator {
     /**
      * @constructor As a side effect generates HTML used in CanvaSynth (dependant on CanvaSynth/index.html).
      * 
-     * @param {string} [color="white"] Colour associated with oscillator.
      * @param {number} [type=0] Type of wave. 0 = sine, 1 = square, 2 = triangle, 3 = sawtooth.
      * @param {number} [frequency=1] Number of wave periods per synthesisation period.
      * @param {number} [amplitude=1] A number the wave is multiplied by. All waves are trunctated to (-1,1)
      * @param {number} [xoffset=0] Amount of x-offset as a fraction of synthesisation period.
      * @param {number} [yoffset=0] Amount of y-offset as a total value (-1, 1).
      */
-    constructor(color = "white", type = 0, frequency = 1, xoffset = 0, yoffset = 0, amplitude = 1) {
-        this.color = color;
+    constructor(type = 0, frequency = 1, xoffset = 0, yoffset = 0, amplitude = 1) {
         this.c = this.constructor.createOscillatorHTML(oscillators.length);
         this.ctx = this.c.getContext('2d');
         this.val;
@@ -95,7 +37,7 @@ class Oscillator {
      * Sort of a wrapper for the constructor that also initialises the visualiser and val lookup table and adds the new oscillator to the oscillators array.
      */
     static addOscillator() {
-        let oscillator = new Oscillator(waveColor);
+        let oscillator = new Oscillator();
         oscillator.updateOscillator();
         oscillators.push(oscillator);
     }
@@ -240,7 +182,7 @@ class Oscillator {
         // HTML canvas set up
         this.ctx.clearRect(0, 0, this.c.width, visualiserHeight);
         this.ctx.beginPath();
-        this.ctx.strokeStyle = this.color;
+        this.ctx.strokeStyle = waveColor;
         this.ctx.lineWidth = 1;
 
         this.ctx.moveTo(0, -visualiserDrawableHeight / 2 * this.val[0] + visualiserHeight / 2);
@@ -252,105 +194,3 @@ class Oscillator {
         this.ctx.stroke();
     }
 }
-
-
-
-// TODO EFFECTS
-//#region
-class Effect {
-
-}
-//#endregion
-
-
-
-
-// The main loop for the whole app. Called as fast as the browser pleases.
-function animate() {
-    p++;
-    if (p >= synthesisPeriod) {
-        p = 0;
-    }
-
-    //#region placeholder effects for debugging
-    s.globalAlpha = fadeOpacity;
-    s.fillStyle = fadeColor;
-    s.fillRect(0, 0, innerWidth, innerHeight);
-    s.globalAlpha = 1;
-    s.strokeStyle = "rgb(85, 255, 33)";
-    s.beginPath();
-    s.arc(
-        centreX + oscillators[0].val[p] * 0.475 * innerWidth,
-        centreY + oscillators[1].val[p] * 0.475 * innerHeight,
-        20, 0, 2 * Math.PI);
-    s.stroke();
-    //#endregion
-
-    requestAnimationFrame(animate);
-}
-
-
-
-
-//#region input
-
-// Collapse an oscillator to just the top bar.
-$('.collapseButton').click(function () {
-    let moduleID = $(this).attr("module");
-    switch (moduleID.charAt(0)) {
-        case 'o':
-            oscAttribute = "[osc='" + moduleID.charAt(1) + "']";
-            $('.visualiser' + oscAttribute + ', .oscillatorParameters' + oscAttribute).toggle();
-            break;
-        default:
-            break;
-    }
-
-});
-
-// Update oscillator frequency from slider.
-$('.freq').on('input', function () {
-    osc = oscillators[parseInt($(this).attr("osc"))];
-    osc.frequency = Math.round(Math.pow(1.006932, this.value)); // Just a nice curve, allows for more contol with small values
-    osc.updateOscillator();
-});
-
-// Update oscillator amplitude from slider.
-$('.amplitude').on('input', function () {
-    osc = oscillators[parseInt($(this).attr("osc"))];
-    osc.amplitude = 1 + (-0.000001 * this.value + 0.01) * this.value;
-    osc.updateOscillator();
-});
-
-// Update oscillator x-offsset from slider.
-$('.xoffset').on('input', function () {
-    osc = oscillators[parseInt($(this).attr("osc"))];
-    osc.xoffset = this.value / 1000;
-    osc.updateOscillator();
-});
-
-// Update oscillator y-offsset from slider.
-$('.yoffset').on('input', function () {
-    osc = oscillators[parseInt($(this).attr("osc"))];
-    osc.yoffset = this.value / 250;
-    osc.updateOscillator();
-});
-
-$('.oscillatorParameter').on('dblclick', function(){
-    $(this).val($(this).attr("defaultValue"));
-    $(this).trigger('input');
-});
-
-// Update oscillator wave type from dropdown
-$('.waveMenu').change(function () {
-    osc = oscillators[parseInt($(this).attr("osc"))];
-    osc.type = parseInt(this.value);
-    osc.updateOscillator();
-});
-
-// Adds oscillator from add oscillator button.
-$('#addOscillator').click(function () {
-    Oscillator.addOscillator();
-    if (oscillators.length >= 10) $(this).hide();
-});
-//#endregion
