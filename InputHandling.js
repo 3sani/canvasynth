@@ -1,10 +1,12 @@
-// Collapse an oscillator to just the top bar.
+// Handles input from various buttons and sliders using jQuery.
+ 
+// Collapse button for various modules
 $('.collapseButton').click(function () {
     let moduleID = $(this).attr("module");
     switch (moduleID.charAt(0)) {
         case 'o':
-            oscAttribute = "[osc='" + moduleID.charAt(1) + "']";
-            $('.visualiser' + oscAttribute + ', .oscillatorParameters' + oscAttribute).toggle();
+            let attr = "[osc='" + moduleID.charAt(1) + "']";
+            $('.visualiser' + attr + ', .oscillatorParameters' + attr).toggle();
             break;
         default:
             break;
@@ -14,13 +16,19 @@ $('.collapseButton').click(function () {
 // Update oscillator frequency from slider.
 $('.freq').on('input', function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
-    osc.frequency = Math.round(Math.pow(1.006932, this.value)); // Just a nice curve, allows for more contol with small values
+
+    // The input is read on a curve to allow for finer control in small values
+    osc.frequency = Math.round(Math.pow(1.006932, this.value)); 
     osc.updateOscillator();
 });
 
 // Update oscillator amplitude from slider.
 $('.amplitude').on('input', function () {
     osc = oscillators[parseInt($(this).attr("osc"))];
+
+    // The input is read on a curve to allow for finer control in values around 
+    // 1 and then made symmetrical so the amplitude of 1 is at the middle of
+    // the slider exactly
     osc.amplitude = 1 + (-0.000001 * this.value + 0.01) * this.value;
     osc.updateOscillator();
 });
@@ -54,6 +62,6 @@ $('.waveMenu').change(function () {
 // Adds oscillator from add oscillator button.
 $('#addOscillator').click(function () {
     Oscillator.addOscillator();
-    if (oscillators.length >= 10) $(this).hide();
+    if (oscillators.length >= maxOscillators) $(this).hide();
 });
 //#endregion
