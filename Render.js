@@ -7,7 +7,10 @@ $(document).ready(function () {
     centreY = innerHeight / 2;
 
     Oscillator.addOscillator();
-    Oscillator.addOscillator(); // TODO REMOVE. Adding second oscillator here just for debugging.
+
+    // TODO REMOVE. Adding second oscillator here just for debugging.
+    Oscillator.addOscillator();
+    
     animate();
 });
 
