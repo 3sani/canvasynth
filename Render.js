@@ -10,7 +10,11 @@ $(document).ready(function () {
 
     // TODO REMOVE. Adding second oscillator here just for debugging.
     Oscillator.addOscillator();
-    
+
+    // TODO DEBUGGING EFFECT, PLEASE REMOVE
+    debugEffect = new Circle();
+    debugCircle = debugEffect.getImageData();
+
     animate();
 });
 
@@ -22,7 +26,6 @@ window.onresize = function () {
     centreY = innerHeight / 2;
 }
 
-
 // The main loop for the whole app. Called as fast as the browser pleases.
 function animate() {
     p++;
@@ -31,18 +34,29 @@ function animate() {
     }
 
     //#region placeholder effects for debugging
+    // s.globalAlpha = fadeOpacity;
+    // s.fillStyle = fadeColor;
+    // s.fillRect(0, 0, innerWidth, innerHeight);
+    // s.globalAlpha = 1;
+    // s.strokeStyle = "rgb(85, 255, 33)";
+    // s.beginPath();
+    // s.arc(
+    //     centreX + oscillators[0].val[p] * 0.475 * innerWidth,
+    //     centreY + oscillators[1].val[p] * 0.475 * innerHeight,
+    //     20, 0, 2 * Math.PI);
+    // s.stroke();
+    //#endregion
+
     s.globalAlpha = fadeOpacity;
     s.fillStyle = fadeColor;
     s.fillRect(0, 0, innerWidth, innerHeight);
     s.globalAlpha = 1;
-    s.strokeStyle = "rgb(85, 255, 33)";
-    s.beginPath();
-    s.arc(
+
+    s.putImageData(
+        debugCircle,
         centreX + oscillators[0].val[p] * 0.475 * innerWidth,
         centreY + oscillators[1].val[p] * 0.475 * innerHeight,
-        20, 0, 2 * Math.PI);
-    s.stroke();
-    //#endregion
+    );
 
     requestAnimationFrame(animate);
 }
