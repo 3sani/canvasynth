@@ -52,4 +52,18 @@ class Circle extends Effect {
     getImageData(){
         return this.ctx.getImageData(0, 0, this.maxWidth, this.maxHeight);
     }
+
+    updateEffect() {
+        this.ctx.clearRect(0, 0, this.maxWidth, this.maxHeight);
+        this.ctx.fillStyle = this.color;
+        this.ctx.beginPath();
+        this.ctx.arc(
+            this.x,
+            this.y,
+            this.radius,
+            0,
+            tau
+        )
+        this.ctx.fill();
+    }
 }
