@@ -13,25 +13,28 @@
 </head>
 
 <body>
-    <canvas id="synth"></canvas>
+    <canvas id="synth"  height="723" width="723"></canvas>
 
     <div id="rack">
+
+        <div id="instrumentRow" class="row">
+
+        </div>
+
         <div id="oscillatorColumn" class="column">
             <div id="oscillators">
                 <!-- oscillators get cloned from #htmlTemplates > #OSCILLATOR_TEMPLATE) -->
             </div>
-            <button id="addOscillator">+ add oscillator +</button>
+            <!-- TODO: Support for more oscillators-->
+            <!-- <button id="addOscillator">+ add oscillator +</button> -->
         </div>
 
         <div id="instrumentColumn" class="column">
             <div id="instruments">
 
             </div>
-            <button id="addInstrument">+ add instrument +</button>
-        </div>
-
-        <div class="column">
-            <canvas class="TODO" height="128" width="402"></canvas>
+            <!-- TODO: Support for more instruments -->
+            <!-- <button id="addInstrument">+ add instrument +</button> -->
         </div>
     </div>
 </body>
@@ -45,7 +48,7 @@
             <div class="topBar">
 
                 <p class="moduleLabel">oscillator</p>
-                <button class="collapseButton" module="-1">[c]</button>
+                <!-- <button class="collapseButton" module="-1">[c]</button> -->
                 
                 <div class="waveMenuContainer">
                     <p class="parameterLabel waveText">wave</p>
@@ -90,42 +93,47 @@
             <div class="topBar">
 
                 <p class="moduleLabel">instrument</p>
-                <button class="collapseButton" module="-1">[c]</button>
-                
-                <div class="waveMenuContainer">
-                    <p class="parameterLabel waveText">wave</p>
-                    <select class="waveMenu" osc="-1">
-                        <option value="0">sine</option>
-                        <option value="1">square</option>
-                        <option value="2">triangle</option>
-                        <option value="3">sawtooth</option>
+                <!-- <button class="collapseButton" module="-1">[c]</button> -->
+
+            </div>
+            <canvas class="visualiser" ins="-1" height="144" width="144"></canvas>
+            <div class="instrumentParameters" ins="-1">
+
+                <div class="parameterContainer">
+                    <p class="parameterLabel">instrument</p>
+                    <select class="instrumentEnabled" param="enabled" ins="-1">
+                        <option value="1">enabled</option>
+                        <option value="0">disabled</option>
                     </select>
                 </div>
 
-            </div>
-            <canvas class="visualiser" osc="-1" height="128" width="400"></canvas>
-            <div class="oscillatorParameters" osc="-1">
-
                 <div class="parameterContainer">
-                    <p class="parameterLabel">frequency</p>
-                    <input class="oscillatorParameter freq" osc="-1" type="range" min="1" max="1000" defaultValue="1" value="1">
+                    <p class="parameterLabel">x-position</p>
+                    <select class="oscillatorPicker" param="xPos" ins="-1">
+                        <option value="0">oscillator 0</option>
+                        <option value="1">oscillator 1</option>
+                        <option value="2">oscillator 2</option>
+                    </select>
                 </div>
 
                 <div class="parameterContainer">
-                    <p class="parameterLabel">amplitude</p>
-                    <input class="oscillatorParameter amplitude" osc="-1" type="range" min="-1000" max="1000" defaultValue="0" value="0">
+                    <p class="parameterLabel">y-position</p>
+                    <select class="oscillatorPicker" param="yPos" ins="-1">
+                        <option value="0">oscillator 0</option>
+                        <option value="1">oscillator 1</option>
+                        <option value="2">oscillator 2</option>
+                    </select>
                 </div>
 
                 <div class="parameterContainer">
-                    <p class="parameterLabel">x-offset</p>
-                    <input class="oscillatorParameter xoffset" osc="-1" type="range" min="0" max="999" defaultValue="0" value="0">
+                    <p class="parameterLabel">alpha</p>
+                    <select class="oscillatorPicker" param="alpha" ins="-1">
+                        <option value="constant">constant 1</option>
+                        <option value="0">oscillator 0</option>
+                        <option value="1">oscillator 1</option>
+                        <option value="2">oscillator 2</option>
+                    </select>
                 </div>
-
-                <div class="parameterContainer">
-                    <p class="parameterLabel">y-offset</p>
-                    <input class="oscillatorParameter yoffset" osc="-1" type="range" min="-500" max="500" defaultValue="0" value="0">
-                </div>
-
             </div>
         </div>
     </div>
