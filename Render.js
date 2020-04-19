@@ -12,8 +12,8 @@ $(document).ready(function () {
     Oscillator.addOscillator();
 
     // TODO DEBUGGING INSTRUMENT, PLEASE REMOVE
-    debugInstrument = new Circle();
-    debugCircle = debugInstrument.getImageData();
+    debugInstrument = new Circle(10);
+    ///debugCircle = debugInstrument.getImageData();
 
     animate();
 });
@@ -52,11 +52,11 @@ function animate() {
     s.fillRect(0, 0, innerWidth, innerHeight);
     s.globalAlpha = 1;
 
-    s.putImageData(
-        debugCircle,
+    debugInstrument.drawInstrument(
+        s, 
         centreX + oscillators[0].val[p] * 0.475 * innerWidth,
         centreY + oscillators[1].val[p] * 0.475 * innerHeight,
-    );
+    )
 
     requestAnimationFrame(animate);
 }

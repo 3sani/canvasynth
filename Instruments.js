@@ -1,6 +1,18 @@
 class Instrument {
-    constructor(){
+    constructor(maxWidth, maxHeight, color){
+        this.maxWidth = maxWidth;
+        this.maxHeight = maxHeight;
+        this.centreX = maxWidth / 2;
+        this.centreY = maxHeight / 2;
+        this.color = color;
+    }
 
+    getInstrumentImage(){
+        return this.ctx.getImageData(0, 0, this.maxWidth, this.maxHeight);
+    }
+
+    drawInstrument(ctx, x, y) {
+        ctx.putImageData(this.getInstrumentImage(), x - this.centreX, y - this.centreY);
     }
 }
 
@@ -13,13 +25,8 @@ class Circle extends Instrument {
         maxHeight = 500,
         color = "white",
     ) {
-        super();
+        super(maxWidth, maxHeight, color);
         this.radius = radius;
-        this.maxWidth = maxWidth;
-        this.maxHeight = maxHeight;
-        this.x = maxWidth / 2;
-        this.y = maxHeight / 2;
-        this.color = color;
         this.canvas = document.createElement('canvas');
         this.ctx = this.canvas.getContext('2d');
         this.canvas.width = maxShapeSize;
@@ -28,8 +35,8 @@ class Circle extends Instrument {
         this.ctx.fillStyle = this.color;
         this.ctx.beginPath();
         this.ctx.arc(
-            this.x,
-            this.y,
+            maxWidth / 2,
+            maxHeight / 2,
             this.radius,
             0,
             tau
@@ -37,17 +44,13 @@ class Circle extends Instrument {
         this.ctx.fill();
     }
 
-    getImageData(){
-        return this.ctx.getImageData(0, 0, this.maxWidth, this.maxHeight);
-    }
-
     updateInstruments() {
         this.ctx.clearRect(0, 0, this.maxWidth, this.maxHeight);
         this.ctx.fillStyle = this.color;
         this.ctx.beginPath();
         this.ctx.arc(
-            this.x,
-            this.y,
+            maxWidth / 2,
+            maxHeight / 2,
             this.radius,
             0,
             tau
