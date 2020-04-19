@@ -58,6 +58,12 @@ var centreY;
  */
 var oscillators = [];
 
+/**
+ * @type {Object[]}
+ * Array containing every active instrument.
+ */
+var instruments = [];
+
 // TODO Add multiple canvases to allow for layered effects
 /**
  * @type {Object}
@@ -77,3 +83,20 @@ var s = sCanvas.getContext('2d');
  * Number of oscillators before the "add oscillator" button gets hidden.
  */
 var maxOscillators = 10;
+
+$(document).ready(function () {
+    document.body.style.backgroundColor = bgColor;
+    centreX = sCanvas.width  / 2;
+    centreY = sCanvas.height / 2;
+
+    Oscillator.addOscillator();
+    Oscillator.addOscillator();
+    Oscillator.addOscillator();
+
+    Circle.addCircle("green circle", "rgb(125, 232, 79)");
+    Circle.addCircle("purple circle", "rgb(193, 122, 240)");
+    Circle.addCircle("orange circle", "rgb(245, 139, 73)");
+    Circle.addCircle("blue circle", "rgb(107, 185, 237)");
+
+    animate();
+});
