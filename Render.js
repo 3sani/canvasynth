@@ -11,9 +11,9 @@ $(document).ready(function () {
     // TODO REMOVE. Adding second oscillator here just for debugging.
     Oscillator.addOscillator();
 
-    // TODO DEBUGGING EFFECT, PLEASE REMOVE
-    debugEffect = new Circle();
-    debugCircle = debugEffect.getImageData();
+    // TODO DEBUGGING INSTRUMENT, PLEASE REMOVE
+    debugInstrument = new Circle();
+    debugCircle = debugInstrument.getImageData();
 
     animate();
 });
@@ -33,7 +33,7 @@ function animate() {
         p = 0;
     }
 
-    //#region placeholder effects for debugging
+    //#region placeholder instruments for debugging
     // s.globalAlpha = fadeOpacity;
     // s.fillStyle = fadeColor;
     // s.fillRect(0, 0, innerWidth, innerHeight);
