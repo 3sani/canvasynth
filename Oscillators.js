@@ -231,13 +231,14 @@ class Oscillator {
         this.ctx.strokeStyle = waveColor;
         this.ctx.lineWidth = 1;
 
+        // Move to the starting point of the visualiser
         this.ctx.moveTo(
             0,
             -drawableHeight / 2 * this.val[0] + visualiserHeight / 2
         );
 
+        // Draw and move the wave as a sequence of lines
         for (let i = 1; i < synthesisPeriod; i++) {
-
             this.ctx.lineTo(
                 i / synthesisPeriod * visualiserWidth,
                 -drawableHeight / 2 * this.val[i] + visualiserHeight / 2
@@ -249,6 +250,7 @@ class Oscillator {
             );
         }
 
+        // Draw the last line segment of the visualiser
         this.ctx.lineTo(
             visualiserWidth,
             -drawableHeight / 2 * this.val[0] + visualiserHeight / 2
