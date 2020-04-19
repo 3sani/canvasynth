@@ -9,13 +9,13 @@ var maxShapeSize = 500;
 // TODO PLAN FOR EFFECTS
 /* 
  * So I think the end result is that we basically gotta render every frame of an
- * effect right here, including any moves and scales and bullshit like that.
+ * effect right here, including any moves and scales and things like that.
  * If we wanna support having 10+ effects at the same time, the overhead of
  * calculating them all every single frame is  going to be way worse than just taking
  * the hit of having to pre-render them all to memory.
  * After all, we're only working with a memory foorprint of
  * width x height x synthesisPeriod x effectTotal * 4
- * And that's just typed int8Arrays (= pretty damn fast and small).
+ * And that's just typed int8Arrays (= pretty fast and small).
  */
 
 class Circle extends Effect {
