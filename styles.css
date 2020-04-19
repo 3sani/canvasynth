@@ -1,6 +1,7 @@
 :root {
     --main: #6cff66;
     --background: #000501;
+    --mainFont : "Lucida Console", Monaco, monospace;
 }
 
 html, body {
@@ -20,16 +21,28 @@ html, body {
     display: none;
 }
 
+body {
+    display: flex;
+    flex-direction: row;
+}
+
+#synth {
+    height: 723px;
+    width: 723px;
+    border: 1px solid var(--main);
+    margin-right: 10px; 
+}
+
 #rack {
     display: flex;
     flex-wrap: nowrap;
     justify-content: center;
     flex-direction: row;
+    margin-bottom: 75px;
 }
 
 #oscillatorColumn {
     width: 402px;
-    --mainFont : "Lucida Console", Monaco, monospace;
 }
 
 .oscillatorContainer, #addOscillator {
@@ -44,6 +57,7 @@ html, body {
     flex-direction: row;
     justify-content: space-between;
     padding: 2px;
+    height: 21px;
 }
 
 .parameterContainer{
@@ -51,7 +65,7 @@ html, body {
     max-height: 35px;
 }
 
-.parameterLabel, .waveMenu, .moduleLabel, .collapseButton {
+.parameterLabel, .waveMenu, .moduleLabel, .collapseButton, .oscillatorPicker, .toggleInstrument, .instrumentEnabled {
     font-family: var(--mainFont);
     color: var(--main);
     display: inline;
@@ -68,7 +82,7 @@ html, body {
     padding-left: 5px;
 }
 
-.collapseButton {
+.collapseButton, .toggleInstrument {
     font-size: 10pt;
     background: none;
     border: 0;
@@ -76,12 +90,16 @@ html, body {
     padding: 3px;
 }
 
-.oscillatorParameters {
+.oscillatorParameters, .instrumentParameters {
     padding: 0 2px 6px 4px;
     display: grid;
     grid-template-columns: auto auto;
     gap: 0;
     margin-top: -4px;
+}
+
+.instrumentParameters {
+    grid-template-columns: auto;
 }
 
 .waveMenuContainer{
@@ -95,7 +113,7 @@ html, body {
     margin-right: -3px;
 }
 
-.waveMenu {
+.waveMenu,  .oscillatorPicker, .instrumentEnabled{
     font-size: 12pt;
     background-color: var(--background);
     border: 1px solid var(--main);
@@ -108,7 +126,6 @@ option {
     background-color: var(--background);
     color: var(--main);
 }
-
 
 input[type=range] {
     -webkit-appearance: none;
@@ -157,4 +174,29 @@ input[type=range]::-webkit-slider-runnable-track {
 #addOscillator:hover {
     color: var(--bg);
     background-color: var(--main);
+}
+
+#instruments {
+    height: 725px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.instrumentContainer {
+    width: 300px;
+    margin-left: 10px;
+    border: 1px solid var(--main);
+    background-color: var(--background);
+}
+
+.instrumentContainer > .visualiser {
+    border-right: 1px solid var(--main);
+    border-bottom: none;
+    float: left;
+}
+
+.instrumentParameters > .parameterContainer {
+    margin-bottom: 1px;
 }
