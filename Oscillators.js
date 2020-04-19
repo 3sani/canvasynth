@@ -167,7 +167,6 @@ class Oscillator {
         let negative =
             Math.min(1, Math.max(-1, -Math.min(1, Math.max(-1, a)) + y));
 
-
         let n = 0.5 * synthesisPeriod; // Combines these for the slightest
 
         for (let i = 0; i < synthesisPeriod; i++) {
