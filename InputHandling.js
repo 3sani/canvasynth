@@ -47,6 +47,7 @@ $('.yoffset').on('input', function () {
     osc.updateOscillator();
 });
 
+// On doubleclick reset to default value
 $('.oscillatorParameter').on('dblclick', function(){
     $(this).val($(this).attr("defaultValue"));
     $(this).trigger('input');
@@ -59,7 +60,37 @@ $('.waveMenu').change(function () {
     osc.updateOscillator();
 });
 
+// Instrument enabled / disabled dropdown.
+$('.oscillatorPicker').on('input', function () {
+    ins = instruments[parseInt($(this).attr("ins"))];
+    ins.enabled = Boolean(this.value == 1);
+});
+
+// All the instrument dropdowns.
+$('.oscillatorPicker').on('input', function () {
+    ins = instruments[parseInt($(this).attr("ins"))];
+    switch ($(this).attr('param')) {
+        case "xPos":
+            ins.xOsc = this.value;
+            break;
+    
+        case "yPos":
+            ins.yOsc = this.value;
+            break;
+
+        case "alpha":
+            ins.alphaOsc = this.value;
+            break;
+    }
+});
+
 // Adds oscillator from add oscillator button.
+$('#addOscillator').click(function () {
+    Oscillator.addOscillator();
+    if (oscillators.length >= maxOscillators) $(this).hide();
+});
+
+// Adds instrument from add instrument button.
 $('#addOscillator').click(function () {
     Oscillator.addOscillator();
     if (oscillators.length >= maxOscillators) $(this).hide();
