@@ -61,7 +61,7 @@ $('.waveMenu').change(function () {
 });
 
 // Instrument enabled / disabled dropdown.
-$('.oscillatorPicker').on('input', function () {
+$('.instrumentEnabled').on('input', function () {
     ins = instruments[parseInt($(this).attr("ins"))];
     ins.enabled = Boolean(this.value == 1);
 });
