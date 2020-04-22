@@ -20,7 +20,7 @@ var p = 0;
  * @type {Number}
  * How much the previous frame is faded out on the synthesisation canvas.
  */
-var fadeOpacity = 0.5;
+var fadeOpacity = 0.25;
 
 /**
  * @type {String}
