@@ -49,7 +49,6 @@ body {
     letter-spacing: 3px;
     border: 1px solid var(--main);
     background: var(--background);
-    margin-bottom: 10px;
 }
 
 .topBar {
@@ -176,7 +175,7 @@ input[type=range]::-webkit-slider-runnable-track {
     background-color: var(--main);
 }
 
-#instruments {
+#instruments, #oscillators {
     height: 725px;
     display: flex;
     flex-direction: column;
