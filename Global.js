@@ -78,6 +78,7 @@ var sCanvas = document.querySelector('#synth');
  */
 var s = sCanvas.getContext('2d');
 
+
 $(document).ready(function () {
     document.body.style.backgroundColor = bgColor;
     centreX = sCanvas.width  / 2;
