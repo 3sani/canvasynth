@@ -255,3 +255,6 @@ class Oscillator {
         this.ctx.stroke();
     }
 }
+
+// Export as a CommonJS module if not running in a browser context
+if (typeof window === 'undefined') module.exports = Oscillator;
