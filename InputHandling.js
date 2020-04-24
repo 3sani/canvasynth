@@ -95,4 +95,3 @@ $('#addOscillator').click(function () {
     Oscillator.addOscillator();
     if (oscillators.length >= maxOscillators) $(this).hide();
 });
-//#endregion
