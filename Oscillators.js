@@ -43,9 +43,8 @@ class Oscillator {
      * @param {number} [yoffset=0]
      * Amount of y-offset as a total value (-1, 1).
      */
-    constructor(type = 0, frequency = 1, xoffset = 0, yoffset = 0, amplitude = 1) {
-        this.c = this.constructor.createOscillatorHTML(oscillators.length);
-        this.ctx = this.c.getContext('2d');
+    constructor(visual=true, type = 0, frequency = 1, xoffset = 0, yoffset = 0, amplitude = 1) {
+        this.visual = visual;
         this.val;
         this.type = type;
         this.frequency = frequency;
@@ -53,6 +52,10 @@ class Oscillator {
         this.yoffset = yoffset;
         this.amplitude = amplitude;
 
+        if (this.visual){
+            this.c = this.constructor.createOscillatorHTML(oscillators.length);
+            this.ctx = this.c.getContext('2d');
+        }
     }
 
     /**
@@ -71,7 +74,7 @@ class Oscillator {
      */
     updateOscillator() {
         this.calculateValueTable();
-        this.drawOscillatorVisualiser();
+        if (this.visual) this.drawOscillatorVisualiser();
     }
 
     /**
@@ -124,9 +127,6 @@ class Oscillator {
     * 
     * This done just because it seems quite standard and also makese sense.
     * (all approxiamte a normal sine)
-    * 
-    * No guarantee that these are the most efficient ways to calculate them,
-    * although they have been optimised quite a bit.
     */
 
     /**
