@@ -78,12 +78,6 @@ var sCanvas = document.querySelector('#synth');
  */
 var s = sCanvas.getContext('2d');
 
-/** 
- * @type {Number}
- * Number of oscillators before the "add oscillator" button gets hidden.
- */
-var maxOscillators = 10;
-
 $(document).ready(function () {
     document.body.style.backgroundColor = bgColor;
     centreX = sCanvas.width  / 2;
