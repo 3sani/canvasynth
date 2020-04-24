@@ -23,9 +23,6 @@
  * 
  * @property {number} yoffset
  * Amount of y-offset as a total value (-1, 1).
- * 
- * @property {Object} dependants
- * Array of objects that need to update when this oscillator updates.
  */
 class Oscillator {
     /**
@@ -55,7 +52,7 @@ class Oscillator {
         this.xoffset = xoffset;
         this.yoffset = yoffset;
         this.amplitude = amplitude;
-        this.dependants = [];
+
     }
 
     /**
