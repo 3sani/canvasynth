@@ -1,4 +1,4 @@
-// The main loop for the whole app.
+// The main loop for the whole app when running in the standard browser environment.
 function animate() {
     p++;
     if (p >= synthesisPeriod) {
