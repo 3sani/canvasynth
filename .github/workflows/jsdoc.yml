@@ -1,0 +1,17 @@
+name: Generate JSDoc
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        uses: andstor/jsdoc-action@v1
+        with:
+          source_dir: .
+          output_dir: ./out
+          front_page: ./out/index.html
