@@ -1,4 +1,61 @@
+/**
+ * @class Canvasynth visual instrument
+ * @classdesc An abstract "visual instrument". Draws shapes etc.
+ * 
+ * @property {String} name
+ * Name of the instrument. Used for UI.
+ * 
+ * @property {String} color
+ * Color in a format that HTML canvas accepts, such as "rgb(255, 255, 255)".
+ * 
+ * @property {Object} xOsc
+ * Oscillator that defines the instrument's render position on the x-axis.
+ * 
+ * @property {Object} yOsc
+ * Oscillator that defines the instrument's render position on the y-axis.
+ * 
+ * @property {Object} alphaOsc
+ * Oscillator that defines the instrument's opacity.
+ * Can also be set to "constant" to have the oscillator be constantly opaque.
+ * 
+ * @property {boolean} enabled
+ * Whether or not this instrument is enabled and should be drawn.
+ * 
+ * @property {Number} maxWidth
+ * Maximum width the instrument's output can be.
+ * 
+ * @property {Number} maxHeight 
+ * Maximum ehight the instrument's output can be.
+ */
 class Instrument {
+    /**
+    * @constructor
+    * 
+    * @property {String} name
+    * Name of the instrument. Used for UI.
+    * 
+    * @property {String} color
+    * Color in a format that HTML canvas accepts, such as "rgb(255, 255, 255)".
+    * 
+    * @property {Object} xOsc
+    * Oscillator that defines the instrument's render position on the x-axis.
+    * 
+    * @property {Object} yOsc
+    * Oscillator that defines the instrument's render position on the y-axis.
+    * 
+    * @property {Object} alphaOsc
+    * Oscillator that defines the instrument's opacity.
+    * Can also be set to "constant" to have the oscillator be constantly opaque.
+    * 
+    * @property {boolean} enabled
+    * Whether or not this instrument is enabled and should be drawn.
+    * 
+    * @property {Number} maxWidth
+    * Maximum width the instrument's output can be.
+    * 
+    * @property {Number} maxHeight 
+    * Maximum ehight the instrument's output can be.
+    */
     constructor(name, color, xOsc, yOsc, alphaOsc, enabled, maxWidth, maxHeight){
         this.name = name;
         this.color = color;
@@ -10,6 +67,15 @@ class Instrument {
         this.maxHeight = maxHeight;
     }
 
+    /**
+     * Draws the instrument onto a specific graphics context at a point in time.
+     * 
+     * @param {Object} ctx
+     * The HTML canvas graphics context the isntrument's output should be drawn onto.
+     *  
+     * @param {Number} frame
+     * The frame number when to draw (at which point oscillator values are gotten).
+     */
     drawInstrument(ctx, frame) {
         let xPos = oscillators[this.xOsc].val[frame];
         let yPos = oscillators[this.yOsc].val[frame];
@@ -28,7 +94,41 @@ class Instrument {
     }
 }
 
+/**
+ * @class Circle instrument
+ * @classdesc An instrument that copies a coloured circle onto a canvas.
+ * 
+ * @extends Instrument
+ */
 class Circle extends Instrument {
+    /**
+    * @constructor
+    * 
+    * @property {String} [name="circle"]
+    * Name of the instrument. Used for UI.
+    * 
+    * @property {String} [color="white"]
+    * Color in a format that HTML canvas accepts, such as "rgb(255, 255, 255)".
+    * 
+    * @property {Object} [xOsc=0]
+    * Oscillator that defines the instrument's render position on the x-axis.
+    * 
+    * @property {Object} [yOsc=0]
+    * Oscillator that defines the instrument's render position on the y-axis.
+    * 
+    * @property {Object} [alphaOsc="constant"]
+    * Oscillator that defines the instrument's opacity.
+    * Can also be set to "constant" to have the oscillator be constantly opaque.
+    * 
+    * @property {boolean} [enabled=true]
+    * Whether or not this instrument is enabled and should be drawn.
+    * 
+    * @property {Number} [maxWidth=500]
+    * Maximum width the instrument's output can be.
+    * 
+    * @property {Number} [maxHeight=500]
+    * Maximum ehight the instrument's output can be.
+    */
     constructor(
         name = "circle",
         color = "white",
@@ -64,6 +164,12 @@ class Circle extends Instrument {
     /**
      * A wrapper function for the constructor that also initialises the
      * visualiser and adds the instrument to the instruments array.
+     * 
+     * @param {String} name
+     * Name for the circle.
+     * 
+     * @param {String} color
+     * Color of the circle.
      */
     static addCircle(name, color) {
         let instrument = new Circle(name, color);
@@ -76,6 +182,12 @@ class Circle extends Instrument {
      * 
      * @param {number} i
      * The index for the instrument.
+     * 
+     * @param {String} name
+     * Name of the circle on the HTML title.
+     * 
+     * @param {String} color
+     * Color of the circle instrument icon.
      */
     static createCircleHTML(i, name, color) {
         let clone =
