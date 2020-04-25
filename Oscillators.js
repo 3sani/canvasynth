@@ -1,4 +1,10 @@
 /**
+ * @file
+ * Oscillators that generate values of trigonometric functions according to
+ * their defined parameters.
+ */
+
+/**
  * @class
  * @classdesc An oscillator that produces the values of a standard wave.
  * 
@@ -26,8 +32,6 @@
  */
 class Oscillator {
     /**
-     * @constructor As a side effect generates HTML used in CanvaSynth
-     * 
      * @param {number} [type=0]
      * Type of wave. 0 = sine, 1 = square, 2 = triangle, 3 = sawtooth.
      * 

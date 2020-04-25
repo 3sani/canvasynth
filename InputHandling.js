@@ -1,5 +1,8 @@
-// Handles input from various buttons and sliders using jQuery.
- 
+/**
+ * @file
+ * Handles input from various buttons and sliders using jQuery.
+ */
+
 // Collapse button for various modules
 $('.collapseButton').click(function () {
     let moduleID = $(this).attr("module");

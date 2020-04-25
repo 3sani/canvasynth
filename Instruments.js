@@ -1,6 +1,13 @@
 /**
- * @class Canvasynth visual instrument
- * @classdesc An abstract "visual instrument". Draws shapes etc.
+ * @file
+ * Visual "instruments" that take as inputs values computed by the oscillators and
+ * give as outputs actual shapes to be rendered.
+ */
+
+/**
+ * @class 
+ * @classdesc
+ * An abstract "visual instrument". Draws shapes etc.
  * 
  * @property {String} name
  * Name of the instrument. Used for UI.
@@ -95,7 +102,7 @@ class Instrument {
 }
 
 /**
- * @class Circle instrument
+ * @class
  * @classdesc An instrument that copies a coloured circle onto a canvas.
  * 
  * @extends Instrument
