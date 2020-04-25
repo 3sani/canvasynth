@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: Oscillators.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: Oscillators.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @file
+ * Oscillators that generate values of trigonometric functions according to
+ * their defined parameters.
+ */
+
+/**
+ * @class
+ * @classdesc An oscillator that produces the values of a standard wave.
+ * 
+ * @property {Object} c
+ * HTML5 canvas used for visualising the wave.
+ * 
+ * @property {Object} ctx
+ * HTML5 canvas context for c.
+ * 
+ * @property {Object} val
+ * Float32Array that acts as a lookup table for the oscillators values that are
+ * called during synthesisation.
+ * 
+ * @property {number} type
+ * Type of wave. 0 = sine, 1 = square, 2 = triangle, 3 = sawtooth.
+ * 
+ * @property {number} frequency
+ * Number of wave periods per synthesisPeriod.
+ * 
+ * @property {number} xoffset
+ * Amount of x-offset as a fraction of synthesisPeriod.
+ * 
+ * @property {number} yoffset
+ * Amount of y-offset as a total value (-1, 1).
+ */
+class Oscillator {
+    /**
+     * @param {number} [type=0]
+     * Type of wave. 0 = sine, 1 = square, 2 = triangle, 3 = sawtooth.
+     * 
+     * @param {number} [frequency=1]
+     * Number of wave periods per synthesisation period.
+     * 
+     * @param {number} [amplitude=1]
+     * A number the wave is multiplied by. All waves are trunctated to (-1,1)
+     * 
+     * @param {number} [xoffset=0]
+     * Amount of x-offset as a fraction of synthesisation period.
+     * 
+     * @param {number} [yoffset=0]
+     * Amount of y-offset as a total value (-1, 1).
+     */
+    constructor(visual=true, type = 0, frequency = 1, xoffset = 0, yoffset = 0, amplitude = 1) {
+        this.visual = visual;
+        this.val;
+        this.type = type;
+        this.frequency = frequency;
+        this.xoffset = xoffset;
+        this.yoffset = yoffset;
+        this.amplitude = amplitude;
+
+        if (this.visual){
+            this.c = this.constructor.createOscillatorHTML(oscillators.length);
+            this.ctx = this.c.getContext('2d');
+        }
+    }
+
+    /**
+     * A wrapper function for the constructor that also initialises the
+     * visualiser and val lookup table and adds the new oscillator to the
+     * oscillators array.
+     */
+    static addOscillator() {
+        let oscillator = new Oscillator();
+        oscillator.updateOscillator();
+        oscillators.push(oscillator);
+    }
+
+    /**
+     * Updates both the val lookup table and the visualiser.
+     */
+    updateOscillator() {
+        this.calculateValueTable();
+        if (this.visual) this.drawOscillatorVisualiser();
+    }
+
+    /**
+     * Creates HTML elements for the oscillator.
+     * Completely dependant on cloning them from the CanvaSynth HTML document.
+     * 
+     * @param {number} i
+     * The index for the oscillator.
+     */
+    static createOscillatorHTML(i) {
+        let clone =
+            $('#OSCILLATOR_TEMPLATE>div').clone(true).appendTo('#oscillators');
+
+        clone.find('[osc="-1"]').attr("osc", i);
+        clone.find('[module="-1"]').attr("module", "o" + i);
+        clone.find('.moduleLabel').html("oscillator " + i);
+        return clone.find('.visualiser')[0];
+    }
+
+    /**
+     * Updates the full value table of an oscillator
+     */
+    calculateValueTable() {
+        switch (this.type) {
+            case 0:
+                this.sineValues();
+                break;
+            case 1:
+                this.squareValues();
+                break;
+            case 2:
+                this.triValues();
+                break;
+            case 3:
+                this.sawValues();
+                break;
+        }
+    }
+
+
+    //#region WAVE FUNCTIONS
+    /* 
+    * Some funky formulas to calculate various wave functions.
+    *
+    * All functions calculate these values for a specific Oscillator object.
+    * 
+    * All functions are defined to look like they are in the following graphs
+    * https://upload.wikimedia.org/wikipedia/commons/7/77/Waveforms.svg
+    * Namely in where the period starts.
+    * 
+    * This done just because it seems quite standard and also makese sense.
+    * (all approxiamte a normal sine)
+    */
+
+    /**
+     * Calculates the value table val for values of a sine wave oscillator.
+     */
+    sineValues() {
+        this.val = new Float32Array(synthesisPeriod);
+        let f = this.frequency;
+        let a = this.amplitude;
+        let x = this.xoffset;
+        let y = this.yoffset;
+
+        for (let i = 0; i &lt; synthesisPeriod; i++) {
+            this.val[i] = Math.min(1, Math.max(-1, // Clamps values to (-1, 1)
+                a * Math.sin(tau * ((f * i) / synthesisPeriod + x)) + y
+            ));
+        }
+    }
+
+    /**
+     * Calculates the value table val for values of a square wave oscillator.
+     */
+    squareValues() {
+        this.val = new Float32Array(synthesisPeriod);
+        let f = this.frequency;
+        let a = this.amplitude;
+        let x = (this.xoffset + 0.5) * synthesisPeriod;
+        let y = this.yoffset;
+
+        // Value returned if the square wave is positive.
+        let positive =
+            Math.min(1, Math.max(-1, Math.min(1, Math.max(-1, a)) + y));
+
+        // Value returned if the square wave is negative.
+        let negative =
+            Math.min(1, Math.max(-1, -Math.min(1, Math.max(-1, a)) + y));
+
+        let n = 0.5 * synthesisPeriod; // Combines these for the slightest
+
+        for (let i = 0; i &lt; synthesisPeriod; i++) {
+            this.val[i] =
+                ((i + x) * f) % synthesisPeriod - n >= 0 ? positive : negative;
+        }
+    }
+
+    /**
+     * Calculates the value table val for values of a triangle wave oscillator.
+     */
+    triValues() {
+        this.val = new Float32Array(synthesisPeriod);
+        let f = this.frequency;
+        let a = this.amplitude * 2;
+        let x = (this.xoffset + 0.75) * synthesisPeriod;
+        let y = this.yoffset;
+
+        for (let i = 0; i &lt; synthesisPeriod; i++) {
+            this.val[i] = Math.min(1, Math.max(-1, // Clamps values to (-1, 1)
+                a * (Math.abs(2 * (((i + x) * f) % synthesisPeriod)
+                    / synthesisPeriod - 1) - 0.5) + y
+            ));
+        }
+    }
+
+    /**
+     * Calculates the value table val for values of a sawtooth wave oscillator.
+     */
+    sawValues() {
+        this.val = new Float32Array(synthesisPeriod);
+        let f = this.frequency;
+        let a = this.amplitude;
+        let x = (this.xoffset + 0.5) * synthesisPeriod;
+        let y = this.yoffset;
+
+        for (let i = 0; i &lt; synthesisPeriod; i++) {
+            this.val[i] = Math.min(1, Math.max(-1, // Clamps values to (-1, 1)
+                a * (2 * (((i + x) * f) % synthesisPeriod) / synthesisPeriod - 1) + y
+            ));
+        }
+    }
+    //#endregion
+
+
+    /**
+     * Renders the visualiser of this oscillator.
+     */
+    drawOscillatorVisualiser() {
+        let visualiserHeight = this.c.height;
+
+        // Limit the drawable height to give 1px room at top and bottom.
+        // (otherwise the top of the wave gets cut by 0.5px)
+        let drawableHeight = visualiserHeight - 4;
+
+        let visualiserWidth = this.c.width;
+
+        // HTML canvas set up
+        this.ctx.clearRect(0, 0, this.c.width, visualiserHeight);
+        this.ctx.beginPath();
+        this.ctx.strokeStyle = waveColor;
+        this.ctx.lineWidth = 1;
+
+        // Move to the starting point of the visualiser
+        this.ctx.moveTo(
+            0,
+            -drawableHeight / 2 * this.val[0] + visualiserHeight / 2
+        );
+
+        // Draw and move the wave as a sequence of lines
+        for (let i = 1; i &lt; synthesisPeriod; i++) {
+            this.ctx.lineTo(
+                i / synthesisPeriod * visualiserWidth,
+                -drawableHeight / 2 * this.val[i] + visualiserHeight / 2
+            );
+
+            this.ctx.moveTo(
+                i / synthesisPeriod * visualiserWidth,
+                -drawableHeight / 2 * this.val[i] + visualiserHeight / 2
+            );
+        }
+
+        // Draw the last line segment of the visualiser
+        this.ctx.lineTo(
+            visualiserWidth,
+            -drawableHeight / 2 * this.val[0] + visualiserHeight / 2
+        );
+
+        this.ctx.stroke();
+    }
+}
+
+// Export as a CommonJS module if not running in a browser context
+if (typeof window === 'undefined') module.exports = Oscillator;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Circle.html">Circle</a></li><li><a href="Instrument.html">Instrument</a></li><li><a href="Oscillator.html">Oscillator</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bgColor">bgColor</a></li><li><a href="global.html#centreX">centreX</a></li><li><a href="global.html#centreY">centreY</a></li><li><a href="global.html#fadeColor">fadeColor</a></li><li><a href="global.html#fadeOpacity">fadeOpacity</a></li><li><a href="global.html#instruments">instruments</a></li><li><a href="global.html#oscillators">oscillators</a></li><li><a href="global.html#p">p</a></li><li><a href="global.html#s">s</a></li><li><a href="global.html#sCanvas">sCanvas</a></li><li><a href="global.html#synthesisPeriod">synthesisPeriod</a></li><li><a href="global.html#tau">tau</a></li><li><a href="global.html#waveColor">waveColor</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.4</a> on Sat Apr 25 2020 05:27:50 GMT+0300 (Eastern European Summer Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
