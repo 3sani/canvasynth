@@ -1,5 +1,5 @@
 # CanvaSynth
 
-A HTML5 canvas based video synthesiser single-page application for artistic and/or entertainment purposes.
+A HTML5 canvas based video synthesiser / wave visualiser single-page application for artistic and/or entertainment purposes.
 
-Will run on a github pages page at some point.
+App available at: https://3sani.github.io/canvasynth/
