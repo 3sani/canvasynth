@@ -17,15 +17,13 @@ jobs:
         node-version: [12.x]
 
     steps:
+    - uses: actions/checkout@v2
+          
     - name: Create JSDoc
       uses: andstor/jsdoc-action@v1
       with:
-        source_dir: .
-        output_dir: ./out
-        template: minami
         front_page: ./out/index.html
-      
-    - uses: actions/checkout@v2
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
