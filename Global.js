@@ -1,80 +1,86 @@
 /**
- * @type {Number}
+ * @file
+ * Global constants and variables for the standard browser environment of the app.
+ * Contains document.ready for initialisation.
+ */
+
+/**
  * Mathematical constant tau = 2 * pi.
+ * @type {Number}
  */
 const tau = 2 * Math.PI;
 
 /**
- * @type {number}
  * Number of HTML5 canvas frames before the synthesisation loops.
+ * @type {number}
  */
 var synthesisPeriod = 360;
 
 /**
- * @type {number}
  * Framecounter for HTML5 canvas frames.
+ * @type {number}
  */
 var p = 0;
 
 /**
- * @type {Number}
  * How much the previous frame is faded out on the synthesisation canvas.
+ * @type {Number}
  */
 var fadeOpacity = 0.25;
 
 /**
- * @type {String}
  * What colour previous frames on the synthesisation canvas are faded with.
+ * @type {String}
  */
 var fadeColor = "rgb(0,0,0)";
 
 /**
- * @type {String}
  * The page background color.
+ * @type {String}
  */
 var bgColor = "black";
 
 /**
- * @type {String}
  * The colour waves are drawn in on the oscillator visualisers.
+ * @type {String}
  */
 var waveColor = "rgb(85, 255, 33)";
 
 /**
- * @type {number}
  * Center x-coordinate for the browser window.
+ * @type {number}
  */
 var centreX;
 
 /**
- * @type {number}
  * Center x-coordinate for the browser window.
+ * @type {number}
  */
 var centreY;
 
 /**
- * @type {Object[]}
  * Array containing every active oscillator.
+ * @type {Object[]}
  */
 var oscillators = [];
 
 /**
- * @type {Object[]}
  * Array containing every active instrument.
+ * @type {Object[]}
  */
 var instruments = [];
 
 // TODO Add multiple canvases to allow for layered effects
 /**
- * @type {Object}
  * Reference to the HTML5 canvas used for the main synthesis.
+ * @type {Object}
  */
 var sCanvas = document.querySelector('#synth');
 
 /**
- * @type {Object} 
  * Reference to the main synthesis canvas graphics context.
  * Used for drawing onto the canvas.
+ * @type {Object} 
  */
 var s = sCanvas.getContext('2d');
 
