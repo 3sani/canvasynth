@@ -77,8 +77,8 @@ describe('Oscillator', function () {
         createOsc(0, 1, 0, 0, 0.1);
         createOsc(0, 1, 0, 0, -0.1);
 
-        for(i = 0; i < o.length; i+=2){
-            for(j = 0; j < synthesisPeriod; j++){
+        for(let i = 0; i < o.length; i+=2){
+            for(let j = 0; j < synthesisPeriod; j++){
                 assert.equal(o[i].val[j] * -1, o[i+1].val[j]);
             }
         }
